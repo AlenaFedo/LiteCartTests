@@ -35,7 +35,6 @@ private  static ChromeDriver StartChrome()
 
     options.addArguments("start-maximized");
     var driver = new ChromeDriver(options);
-
     return driver;
 }
 
@@ -70,7 +69,7 @@ private  static ChromeDriver StartChrome()
         return driver;
     }
 
-    @After
+    //@After
     public void Stop()
     {
     driver.quit();
