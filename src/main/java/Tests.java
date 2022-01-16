@@ -11,26 +11,25 @@ public class Tests extends MainClass{
     @Test
     public void loginTest() {
         driver.get("http://localhost/litecart/admin/");
-        Login();
+        login();
     }
 
     @Test
     public void menuTest() {
         driver.get("http://localhost/litecart/admin/");
-        Login();
+        login();
 
         List<WebElement> list = driver.findElements(By.cssSelector("li#app-"));
 
-        for ( int i=1; i<=list.size(); i++){
+        for ( int i=1; i<=list.size(); i++) {
             var element = driver.findElement(By.cssSelector("ul#box-apps-menu>  li:nth-child("+i+")"));
             element.click();
-            System.out.println("Page has header "+GetHeader());
+            System.out.println("Page has header "+ getHeader());
             var size = driver.findElements(By.cssSelector("ul.docs li")).size();
-            for ( int j=1; j<=size; j++)
-            {
+            for ( int j=1; j<=size; j++) {
                 var subelement = driver.findElement(By.cssSelector("ul.docs li:nth-child("+j+")"));
-                        subelement.click();
-                System.out.println("   SubHeader: "+GetHeader());
+                subelement.click();
+                System.out.println("   SubHeader: "+ getHeader());
             }
          }
     }
@@ -42,19 +41,17 @@ public class Tests extends MainClass{
 
         List<WebElement> list = driver.findElements(By.cssSelector("ul.listing-wrapper.products li"));
 
-        for ( WebElement element : list){
+        for ( WebElement element : list) {
             var name = element.findElement(By.cssSelector("div.name")).getText();
             try {
                 var stickers = element.findElements(By.cssSelector("div[class*=sticker]"));
-                if(stickers.size()>1)
-                {
+                if(stickers.size()>1) {
                     System.out.println("Product " + name +"has " + stickers.size() + " Stickers ");
                 }
                 var sticker = element.findElement(By.cssSelector("div[class*=sticker]"));
                 System.out.println("Product '" + name +"' : Sticker " + sticker.getText() );
             }
-            catch (NoSuchElementException ex)
-            {
+            catch (NoSuchElementException ex) {
                 System.out.println("Element " + name + "Sticker wasn't fould ");
             }
         }
@@ -64,12 +61,12 @@ public class Tests extends MainClass{
     public void countriesVerificationTest() {
 
         driver.get("http://localhost/litecart/admin/?app=countries&doc=countries");
-        Login();
+        login();
 
         List<WebElement> list = driver.findElements(By.cssSelector("tr.row"));
 
         var prevName = "";
-        for ( int i=2; i<=list.size()+1; i++){
+        for ( int i=2; i<=list.size()+1; i++) {
 
             var element = driver.findElement(By.cssSelector("table.dataTable tr:nth-child("+i+")"));
 
@@ -88,7 +85,7 @@ public class Tests extends MainClass{
 
             if (Integer.parseInt(zones) > 0) {
                 countryElement.click();
-                Assert.assertTrue(VerifyZones());
+                Assert.assertTrue(verifyZones());
                 driver.navigate().back();
             }
         }
@@ -98,7 +95,7 @@ public class Tests extends MainClass{
     public void zonesVerificationTest() {
 
         driver.get("http://localhost/litecart/admin/?app=geo_zones&doc=geo_zones");
-        Login();
+        login();
 
         List<WebElement> list = driver.findElements(By.cssSelector("tr.row"));
 
@@ -113,9 +110,8 @@ public class Tests extends MainClass{
             System.out.println("   "+name);
 
             countryElement.click();
-            Assert.assertTrue(VerifyZones2());
+            Assert.assertTrue(verifyZones2());
             driver.navigate().back();
-
         }
     }
 
@@ -131,24 +127,22 @@ public class Tests extends MainClass{
         var campaignPrice1 = element.findElement(By.cssSelector("strong.campaign-price")).getText();
 
         var elementregularPrice = element.findElement(By.cssSelector("s.regular-price"));
-        VerifyFont(elementregularPrice, "regular");
+        verifyFont(elementregularPrice, "regular");
 
         var elementcampaignPrice = element.findElement(By.cssSelector("strong.campaign-price"));
-        VerifyFont(elementcampaignPrice, "campaign");
+        verifyFont(elementcampaignPrice, "campaign");
 
-        VerifyFontSizes(elementregularPrice, elementcampaignPrice);
-
-
+        verifyFontSizes(elementregularPrice, elementcampaignPrice);
 
         element.findElement(By.cssSelector("a.link")).click();
 
         elementregularPrice = driver.findElement(By.cssSelector("s.regular-price"));
-        VerifyFont(elementregularPrice, "regular");
+        verifyFont(elementregularPrice, "regular");
 
         elementcampaignPrice = driver.findElement(By.cssSelector("strong.campaign-price"));
-        VerifyFont(elementcampaignPrice, "campaign");
+        verifyFont(elementcampaignPrice, "campaign");
 
-        VerifyFontSizes(elementregularPrice, elementcampaignPrice);
+        verifyFontSizes(elementregularPrice, elementcampaignPrice);
 
         var productName2 = driver.findElement(By.cssSelector("h1.title")).getText();
         var regularPrice2 = driver.findElement(By.cssSelector("s.regular-price")).getText();
@@ -159,16 +153,14 @@ public class Tests extends MainClass{
         Assert.assertEquals("Product campaign-prices should be equals", campaignPrice1, campaignPrice2);
 
         var elementPrice = driver.findElement(By.cssSelector("s.regular-price"));
-        VerifyFont(elementPrice, "regular");
+        verifyFont(elementPrice, "regular");
 
         elementPrice = driver.findElement(By.cssSelector("strong.campaign-price"));
-        VerifyFont(elementPrice, "campaign");
-
-
+        verifyFont(elementPrice, "campaign");
     }
 
 
-    private static void Login()
+    private static void login()
     {
         WebElement username = driver.findElement(By.xpath("//input[@name=\"username\" ]"));
         username.sendKeys("admin");
@@ -176,17 +168,16 @@ public class Tests extends MainClass{
         driver.findElement(By.xpath("//button[@name=\"login\" ]")).click();
     }
 
-    private String GetHeader()
+    private String getHeader()
     {
         List<WebElement> list = driver.findElements(By.cssSelector("h1"));
-        if(list.size()>0)
-        {
+        if(list.size()>0) {
             return list.get(0).getText();
         }
         return null;
     }
 
-    private boolean VerifyZones()
+    private boolean verifyZones()
     {
         List<WebElement> list = driver.findElements(By.cssSelector("input[name*='[name]']"));
 
@@ -204,13 +195,13 @@ public class Tests extends MainClass{
         return true;
     }
 
-    private boolean VerifyZones2()
+    private boolean verifyZones2()
     {
         List<WebElement> list = driver.findElements(By.cssSelector("table.dataTable [name*='[zone_code]'] [selected]"));
 
         for(WebElement ele : list) {
             var prevzone = "";
-        var zone = ele.getAttribute("label");
+            var zone = ele.getAttribute("label");
             System.out.println(zone);
 
             ((JavascriptExecutor)driver).executeScript("arguments[0].scrollIntoView();",ele);
@@ -218,13 +209,13 @@ public class Tests extends MainClass{
                 if (zone.compareTo(prevzone) < 0) {
                     System.out.println("nextZone " + zone + "not in alphabetical order");
                     return false;
-            }
+                }
                 prevzone = zone;
         }
         return true;
     }
 
-    private void VerifyFont(WebElement element, String price) {
+    private void verifyFont(WebElement element, String price) {
 
         var colorStyle = element.getCssValue("color");
 
@@ -241,8 +232,7 @@ public class Tests extends MainClass{
             Assert.assertEquals("regular-price: RGB values equals", r, b);
             Assert.assertTrue("regular-price: Font  strike-through", font.contains("line-through"));
         }
-        else
-        {
+        else {
             var font = element.getCssValue("font-weight");
 
             Assert.assertTrue("campaign-price: G==0", g==0);
@@ -252,7 +242,7 @@ public class Tests extends MainClass{
 
     }
 
-    private void VerifyFontSizes(WebElement elementregularPrice, WebElement elementcampaignPrice)
+    private void verifyFontSizes(WebElement elementregularPrice, WebElement elementcampaignPrice)
     {
         var regularFontSize = elementregularPrice.getCssValue("font-size");
         var campaignFontSize = elementcampaignPrice.getCssValue("font-size");
