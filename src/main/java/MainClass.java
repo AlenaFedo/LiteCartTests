@@ -18,14 +18,14 @@ public class MainClass {
     public void start() {
 
         //driver = StartFirefox();
-        driver = StartChrome();
+        driver = startChrome();
         driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
         //driver = StartOpera();
         //driver = StartInternetExplorer();
     }
 
 
-private  static ChromeDriver StartChrome()
+private static ChromeDriver startChrome()
 {
     System.setProperty("webdriver.chrome.driver",
         "D:\\Selenium\\Drivers\\chromedriver.exe");
@@ -38,7 +38,7 @@ private  static ChromeDriver StartChrome()
     return driver;
 }
 
-    private  static FirefoxDriver StartFirefox()
+    private static FirefoxDriver startFirefox()
     {
         System.setProperty("webdriver.gecko.driver",
                 "D:\\Selenium\\Drivers\\geckodriver.exe");
@@ -48,7 +48,7 @@ private  static ChromeDriver StartChrome()
         return driver;
     }
 
-    private  static OperaDriver StartOpera()
+    private static OperaDriver startOpera()
     {
         System.setProperty("webdriver.opera.driver",
                 "D:\\Selenium\\Drivers\\operadriver.exe");
@@ -58,7 +58,7 @@ private  static ChromeDriver StartChrome()
         return driver;
     }
 
-    private static InternetExplorerDriver StartInternetExplorer()
+    private static InternetExplorerDriver startInternetExplorer()
     {
         System.setProperty("webdriver.ie.driver",
                 "D:\\Selenium\\Drivers\\IEDriverServer.exe");
@@ -70,7 +70,7 @@ private  static ChromeDriver StartChrome()
     }
 
     //@After
-    public void Stop()
+    public void stop()
     {
     driver.quit();
     driver = null;
