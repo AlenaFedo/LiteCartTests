@@ -14,6 +14,21 @@ public class Tests extends MainClass{
         login();
     }
 
+
+    @Test
+    public void createNewUser() {
+        driver.get("http://localhost/litecart/");
+        String email = "user" + System.currentTimeMillis() + "@email.com";
+        String password = "user";
+        String firstname = "firstname";
+        String lastname = "lastname";
+        String address = "address";
+        createUser(email, password, firstname, lastname, address);
+        logout();
+        login(email, password);
+        logout();
+    }
+
     @Test
     public void menuTest() {
         driver.get("http://localhost/litecart/admin/");
@@ -248,5 +263,31 @@ public class Tests extends MainClass{
         var campaignFontSize = elementcampaignPrice.getCssValue("font-size");
 
         Assert.assertTrue("Regular font size should be more then campaign font size", regularFontSize.compareTo(campaignFontSize)<0);
+    }
+
+    private void createUser(String email, String password, String firstname, String lastname, String address) {
+        driver.findElement(By.name("login_form")).findElement(By.cssSelector("a")).click();
+        driver.findElement(By.name("firstname")).sendKeys(firstname);
+        driver.findElement(By.name("lastname")).sendKeys(lastname);
+        driver.findElement(By.name("address1")).sendKeys(address);
+        driver.findElement(By.name("postcode")).sendKeys("123456");
+        driver.findElement(By.name("city")).sendKeys("City");
+        driver.findElement(By.cssSelector(".select2-selection__rendered")).click();
+        driver.findElement(By.cssSelector("[id $= RU]")).click();
+        driver.findElement(By.name("email")).sendKeys(email);
+        driver.findElement(By.name("phone")).sendKeys("1234567");
+        driver.findElement(By.name("password")).sendKeys(password);
+        driver.findElement(By.name("confirmed_password")).sendKeys(password);
+        driver.findElement(By.name("create_account")).click();
+      }
+
+    private void login(String email, String password) {
+        driver.findElement(By.name("email")).sendKeys(email);
+        driver.findElement(By.name("password")).sendKeys(password);
+        driver.findElement(By.name("login")).click();
+    }
+
+    private void logout() {
+        driver.findElement(By.linkText("Logout")).click();
     }
 }
