@@ -3,6 +3,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.openqa.selenium.*;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,6 +13,18 @@ public class Tests extends MainClass{
     public void loginTest() {
         driver.get("http://localhost/litecart/admin/");
         login();
+    }
+
+    @Test
+    public void createNewProduct() {
+        driver.get("http://localhost/litecart/admin/");
+        login();
+        File file = new File("./src/main/resources/Duck.png");
+        var productName = "New Duck Product";
+        createProduct(productName, "12345", "Subcategory", "Unisex",
+                "55.66", "01012019", "01092025", file.getAbsolutePath());
+
+        Assert.assertTrue(driver.findElement(By.linkText(productName)).isDisplayed());
     }
 
 
@@ -289,5 +302,49 @@ public class Tests extends MainClass{
 
     private void logout() {
         driver.findElement(By.linkText("Logout")).click();
+    }
+
+    private void createProduct(String productName, String id, String defaultCategory, String gender, String quantity,
+                               String dateFrom, String dateTo, String fileName)
+    {
+        driver.findElement(By.xpath("//*[text()='Catalog']")).click();
+        driver.findElement(By.xpath("//*[text()=' Add New Product']")).click();
+        //fill General tab
+
+        driver.findElement(By.cssSelector("input[type = radio][value = '1']")).click();
+        driver.findElement(By.name("name[en]")).sendKeys(productName);
+        driver.findElement(By.name("code")).sendKeys(id);
+        driver.findElement(By.cssSelector("input[type = checkbox][value = '2']")).click();
+        driver.findElement(By.name("default_category_id")).click();
+        driver.findElement(By.xpath(String.format("//*[text()='%s']", defaultCategory))).click();
+        driver.findElement(By.xpath(String.format("//tr/td[text()='%s']/../td[1]", gender))).click();
+        driver.findElement(By.name("quantity")).clear();
+        driver.findElement(By.name("quantity")).sendKeys(quantity);
+        driver.findElement(By.cssSelector("input[type='date'][name='date_valid_from']")).sendKeys(dateFrom);
+        driver.findElement(By.cssSelector("input[type='date'][name='date_valid_to']")).sendKeys(dateTo);
+
+        WebElement fileInput = driver.findElement(By.cssSelector("input[type='file'][name='new_images[]']"));
+        fileInput.sendKeys(fileName);
+
+        //fill Information tab
+        driver.findElement(By.xpath("//*[text()='Information']")).click();
+        driver.findElement(By.name("manufacturer_id")).click();
+        driver.findElement(By.xpath("//*[text()='ACME Corp.']")).click();
+        driver.findElement(By.name("keywords")).sendKeys("New keywords");
+        driver.findElement(By.name("short_description[en]")).sendKeys("short description");
+        driver.findElement(By.className("trumbowyg-editor")).sendKeys("Long description");
+        driver.findElement(By.name("head_title[en]")).sendKeys("Head Title");
+        driver.findElement(By.name("meta_description[en]")).sendKeys("Meta description");
+
+        //fill Prices tab
+        driver.findElement(By.xpath("//*[text()='Prices']")).click();
+        driver.findElement(By.name("purchase_price")).sendKeys("23.99");
+        driver.findElement(By.name("purchase_price_currency_code")).click();
+        driver.findElement(By.xpath("//*[text()='US Dollars']")).click();
+        driver.findElement(By.name("prices[USD]")).sendKeys("12.34");
+        driver.findElement(By.name("prices[EUR]")).sendKeys("67.88");
+
+        driver.findElement(By.name("save")).click();
+
     }
 }
